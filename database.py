@@ -3,12 +3,15 @@ import re
 from table import Table
 import pickle
 import os
+import sqlite3
+
 
 class Database:
     def __init__(self,name):
         self.__name = name
         self.__tables = []
         self.__path = None
+        self.__conn = None
 
     def get_name(self):
         return self.__name
@@ -17,45 +20,59 @@ class Database:
         return self.__path
 
     def add_table(self,name):
-        tbl = Table(name)
-        self.__tables.append(tbl)
-
-    def get_tables(self):
-        return self.__tables
+        cur = self.__conn.cursor()
+        cur.execute("CREATE TABLE "+name+" (id INT);")
+        self.__tables.append(name)
 
     def get_tables_names(self):
-        res = []
-        for el in self.__tables:
-            res.append(el.get_name())
-        return res
+        return self.__tables
 
     def rename_table(self, name, new_name):
-        for el in self.__tables:
-            if el.get_name() == name:
-                el.rename(new_name)
+        cur = self.__conn.cursor()
+        cur.execute("ALTER TABLE "+str(name)+
+                    " RENAME TO "+str(new_name)+";")
+        for i in range(0,len(self.__tables)):
+            if self.__tables[i] == name:
+                self.__tables[i] = new_name
                 break
+        cur.close()
+        self.__conn.commit()
 
     def get_table(self,name):
-        for el in self.__tables:
-            if el.get_name() == name:
-                return el
+        tbl = Table(name, self.__conn)
+        return tbl
 
-    def delete_table(self,name):
+    def delete_table(self, name):
+        cur = self.__conn.cursor()
+        cur.execute("DROP TABLE "+str(name))
         for el in self.__tables:
-            if el.get_name() == name:
+            if el == name:
                 self.__tables.remove(el)
                 break
+        cur.close()
+        self.__conn.commit()
 
     def save(self,path):
         self.__path = path
-        pickle.dump(self,open(path,"wb"),protocol=pickle.HIGHEST_PROTOCOL)
+        self.__conn.commit()
+        self.__conn.close()
 
-    def load(self,path):
+    def load(self,path,name):
         if os.path.exists(path):
-            db = pickle.load(open(path,'rb'))
-            self.__name = db.get_name()
-            self.__tables = db.get_tables()
-            self.__path = db.get_path()
+            self.__conn = sqlite3.connect(path)
+            cur = self.__conn.cursor()
+            tbls = cur.execute("SELECT name FROM sqlite_master WHERE TYPE='table'")
+            self.__tables = []
+            for el in tbls:
+                self.__tables.append(str(el[0]))
+            self.__name = name
+            self.__path = path
+            cur.close()
+        else:
+            self.__conn = sqlite3.connect(path)
+            self.__name = name
+            self.__tables = []
+            self.__path = path
 
     def rename(self,name):
         if self.__path is not None:
@@ -70,7 +87,9 @@ class Database:
         self.__name=name
 
     def delete(self):
-        os.remove(self.__path)
+        self.__conn.close()
+        if self.__path is not None:
+            os.remove(self.__path)
 
     def table_mult(self,name1, name2):
         rows1 = []
@@ -78,12 +97,12 @@ class Database:
         cols1 = []
         cols2 = []
         for el in self.__tables:
-            if el.get_name()==name1:
-                tbl1 = el
+            if el==name1:
+                tbl1 = Table(el,self.__conn)
                 rows1 = tbl1.get_rows()
                 cols1 = tbl1.get_columns_names_types()
-            if el.get_name()==name2:
-                tbl2 = el
+            if el==name2:
+                tbl2 = Table(el,self.__conn)
                 rows2 = tbl2.get_rows()
                 cols2 = tbl2.get_columns_names_types()
 

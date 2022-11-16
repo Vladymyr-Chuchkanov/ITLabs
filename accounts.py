@@ -86,7 +86,7 @@ class Accounts:
         file.close()
 
     def save_db(self):
-        db_path = "files/"+self.__selected_acc+self.__DB.get_name()+".pkl"
+        db_path = "files/"+self.__selected_acc+self.__DB.get_name()+".db"
         self.__DB.save(db_path)
         self.__DB = None
 
@@ -115,9 +115,9 @@ class Accounts:
         self.__DB.rename(name)
 
     def get_db(self,name):
-        db_path = "files/" + self.__selected_acc + name + ".pkl"
+        db_path = "files/" + self.__selected_acc + name + ".db"
         db = Database(name)
-        db.load(db_path)
+        db.load(db_path, name)
         self.__DB = db
         return self.__DB
 

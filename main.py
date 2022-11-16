@@ -108,8 +108,8 @@ def table_create_page(db,operation, name0=""):
             name = values["tbl_name_input_field"]
             if name in tbls and operation != "Перейменувати" or (operation == "Перейменувати" and name in tbls and name != name0):
                 window["enter_error_window"].update("Введіть унікальну назву!", text_color="red")
-            elif not re.fullmatch(r'[a-zA-Z_0-9]*', name):
-                window["enter_error_window"].update("Лише символи: a-zA-Z_0-9", text_color="red")
+            elif not re.fullmatch(r'[a-zA-Z]{1}[a-zA-Z_0-9]*', name):
+                window["enter_error_window"].update("Лише символи: a-zA-Z_0-9 починати з a-zA-Z", text_color="red")
             else:
                 if operation == "Створити":
                     db.add_table(name)
@@ -142,18 +142,18 @@ def column_create_page(table, operation,name0=""):
             return -1
         if event == operation:
             name = values["tbl_name_input_field"]
-            if operation =="Редагувати":
+            """if operation =="Редагувати":
                 type = name0.split(":")[1]
                 if len(values["select_type"]) != 0:
                     if type != values["select_type"] and row_n>0 :
                         window["enter_error_window"].update("Неможливо змінити тип - кі-сть рядків більше 0!", text_color="red")
-                        continue
+                        continue"""
 
             if name in cols and operation != "Редагувати" or (
                     operation == "Редагувати" and name in cols and name != name0):
                 window["enter_error_window"].update("Введіть унікальну назву!", text_color="red")
-            elif not re.fullmatch(r'[a-zA-Z_0-9]*', name):
-                window["enter_error_window"].update("Лише символи: a-zA-Z_0-9", text_color="red")
+            elif not re.fullmatch(r'[a-zA-Z]{1}[a-zA-Z_0-9]*', name):
+                window["enter_error_window"].update("Лише символи: a-zA-Z_0-9 починати з a-zA-Z", text_color="red")
             else:
                 if operation == "Створити":
                     if len(values["select_type"]) != 0:
@@ -404,6 +404,9 @@ def db_main_page(accs, name):
                 return 1
             return -1
         if event == "Змінити назву бази":
+            ev, vals = sg.Window('Попередження!', [[sg.Text("Тимчасово недоступно!")], [sg.OK()]],
+                                 size=(300, 70)).read(close=True)
+            continue
             name2 = db_create_page(accs, "Перейменувати",name)
             if name2 != -1:
                 window["db_name"].update(name2)
