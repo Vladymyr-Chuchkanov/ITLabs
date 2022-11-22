@@ -10,6 +10,12 @@ class Accounts:
         self.__selected_dbs = self.__get_dbs()
         self.__DB = None
 
+    def refresh(self,login):
+        self.__accounts, self.__selected_acc = self.load()
+        self.__selected_acc = login
+        self.__selected_dbs = self.__get_dbs()
+        self.__DB = None
+
 
     def get_acc(self):
         return self.__accounts

@@ -37,6 +37,9 @@ class Table:
             n2 = len(self.__rows)
         if n1 > len(self.__rows):
             n1 = len(self.__rows)
+        for i in range(0,len(self.__rows)):
+            for j in range(0,len(self.__rows[i])):
+                self.__rows[i][j]=str(self.__rows[i][j])
         return self.__rows[n1:n2]
 
     def get_rows_num(self):
@@ -99,6 +102,7 @@ class Table:
                 continue
             self.__rows.append(list(el[1:]))
         cur.close()
+
         return -1,"Ok"
 
     def add_column(self,name, type):

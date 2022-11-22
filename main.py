@@ -4,6 +4,7 @@ import pandas as pd
 import PySimpleGUI as sg
 from accounts import Accounts
 from client import Client
+from client_soap import Client_soap
 
 TYPES = ["int","char","string","real","complexInteger","complexReal"]
 def register_page(accs):
@@ -466,10 +467,12 @@ def dbs_page(accs):
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             accs.save()
+            accs.log_out()
             window.close()
             return -1
         if event == "Змінити користувача":
             accs.save()
+            accs.log_out()
             window.close()
             return 0
         if event == "Завантажити обрану базу":
@@ -491,7 +494,8 @@ def dbs_page(accs):
 if __name__ == '__main__':
 
     #accs = Accounts()
-    client = Client()
+    #client = Client()
+    client = Client_soap()
     res = start_page(client)
     if res == -1:
         client.save()
