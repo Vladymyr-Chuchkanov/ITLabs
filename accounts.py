@@ -77,8 +77,9 @@ class Accounts:
                 for i in range(0,len(self.__accounts)):
                     temp.append("")
                 self.__accounts.insert(0,mail,temp)
+                self.__accounts.to_excel("files/accounts.xlsx", index=False)
 
-                pass
+
             return "OK"
         else:
             return "Bad email"

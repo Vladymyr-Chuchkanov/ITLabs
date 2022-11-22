@@ -8,11 +8,7 @@ class Table:
         cur.execute("Select * from " + str(self.__name) + ";")
         res = cur.fetchall()
         self.__rows=[]
-        t = 0
         for el in res:
-            if t ==0:
-                t = 1
-                continue
             self.__rows.append(list(el[1:]))
         cur.execute("pragma table_info(" + self.__name + ");")
         cols = cur.fetchall()
@@ -95,11 +91,8 @@ class Table:
         cur.execute("Select * from " + str(self.__name) + ";")
         res = cur.fetchall()
         self.__rows = []
-        t = 0
+
         for el in res:
-            if t == 0:
-                t = 1
-                continue
             self.__rows.append(list(el[1:]))
         cur.close()
 
@@ -121,7 +114,7 @@ class Table:
     def delete_row(self, n):
         cur = self.__conn.cursor()
         n = int(n)
-        if n >= len(self.__rows):
+        if n >= len(self.__rows) or n<0:
             return "Видалено 0 рядків - індекс поза межами!"
         temp = self.__rows.pop(n)
         str0="DELETE FROM "+self.__name+" WHERE "
