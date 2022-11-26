@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web_client</title>
+</head>
+<body>
+
+    <div>
+        <form method="POST" action="{{url_for('open_db')}}">
+            <button type="submit">Back</button>
+        </form>
+        <p>account - {{ account }}</p>
+        <p>database - {{ db }}</p>
+        <p>table - {{ tbl }}</p>
+        <p>Tables:</p>
+        <select name="cols">
+            {% for name in cols %}
+            <option>{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <form method="POST" action="{{url_for('add_col')}}">
+            <input type="text" name="colname">
+            <select name="type">
+                {% for name in tps %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Add col</button>
+        </form>
+    </div>
+
+    <div>
+        <form method="POST" action="{{url_for('add_row')}}">
+            <input type="text" name="values">
+            <button type="submit">Add row</button>
+        </form>
+        <textarea name="error">{{ error }}</textarea>
+    </div>
+    <div>
+        <form method="GET" action="{{url_for('get_rows')}}">
+            <input type="text" name="n1">
+            <input type="text" name="n2">
+            <button type="submit">Get row</button>
+        </form>
+
+    </div>
+    <div>
+        {% for name in rws %}
+                <p>{{ name }}</p>
+                {% endfor %}
+    </div>
+
+</body>
+</html>

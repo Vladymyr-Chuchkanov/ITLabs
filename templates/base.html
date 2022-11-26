@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web_client</title>
+</head>
+<body>
+    <form method="POST" action=" {{url_for('index')}} " enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="text" name="email" >
+            <button type="submit" name="log_in">Log in</button>
+        </div>
+    </form>
+    <form method="GET" action=" {{url_for('register')}} " enctype="multipart/form-data">
+        <div class="form-group">
+            <textarea name ="error">{{ error }}</textarea>
+            <button type="submit" name="register">register</button>
+        </div>
+    </form>
+</body>
+</html>

@@ -6,10 +6,23 @@ class Client:
     def __init__(self):
         self.url = 'http://localhost:8000?wsdl'
         self.selected = ""
+        self.db =""
+        self.tbl=""
 
     def save(self):
         data = {"Save": {"login":self.selected}}
         requests.post(self.url, data=json.dumps(data), verify=False)
+
+    def get_login(self):
+        return self.selected
+    def get_selected_db(self):
+        return self.db
+    def add_selected_db(self,name):
+        self.db=name
+    def add_selected_tbl(self,name):
+        self.tbl=name
+    def get_selected_tbl(self):
+        return self.tbl
 
     def get_selected(self):
         return self.selected

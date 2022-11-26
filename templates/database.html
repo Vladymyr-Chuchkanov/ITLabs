@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web_client</title>
+</head>
+<body>
+
+    <div>
+        <form method="POST" action="{{url_for('account', login = account)}}">
+            <button type="submit">Back</button>
+        </form>
+        <p>account - {{ account }}</p>
+        <p>database - {{ db }}</p>
+        <p>Tables:</p>
+        <select name="tbls">
+            {% for name in tbls %}
+            <option>{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <form method="POST" action="{{url_for('add_tbl')}}">
+            <input type="text" name="tblname">
+            <button type="submit">Add tbl</button>
+        </form>
+    </div>
+    <div>
+        <form method="POST" action="{{url_for('delete_tbl')}}">
+            <p>delete selected tbl</p>
+            <select name="tbls2">
+                {% for name in tbls %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Delete tbl</button>
+        </form>
+    </div>
+    <div>
+        <form method="GET" action="{{url_for('open_tbl')}}">
+            <p>open selected tbl</p>
+            <select name="tbls3">
+                {% for name in tbls %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Open tbl</button>
+        </form>
+    </div>
+    <div>
+        <form method="POST" action="{{url_for('mult_tbl')}}">
+            <p>mult selected tbls</p>
+            <select name="tbls_left">
+                {% for name in tbls %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <select name="tbls_right">
+                {% for name in tbls %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Mult tbl</button>
+            <p>{{ head}}</p>
+            {% for name in data %}
+                <p>{{ name }}</p>
+            {% endfor %}
+        </form>
+    </div>
+
+</body>
+</html>

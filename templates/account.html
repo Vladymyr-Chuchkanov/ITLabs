@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web_client</title>
+</head>
+<body>
+
+    <div>
+        <form method="POST" action="{{url_for('logout')}}">
+            <button type="submit">Back</button>
+        </form>
+        <p>account - {{ login }}</p>
+
+        <p>Databeses:</p>
+        <select name="dbs">
+            {% for name in dbs %}
+            <option>{{ name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <form method="POST" action="{{url_for('add_db')}}">
+            <input type="text" name="dbname">
+            <button type="submit">Add db</button>
+        </form>
+    </div>
+    <div>
+        <form method="POST" action="{{url_for('delete_db')}}">
+            <p>delete selected db</p>
+            <select name="dbs2">
+                {% for name in dbs %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Delete db</button>
+        </form>
+    </div>
+    <div>
+        <form method="GET" action="{{url_for('open_db')}}">
+            <p>open selected db</p>
+            <select name="dbs3">
+                {% for name in dbs %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Open db</button>
+        </form>
+    </div>
+
+
+</body>
+</html>
